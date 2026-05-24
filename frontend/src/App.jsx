@@ -16,7 +16,7 @@ export default function App() {
     try {
       setLoading(true);
 
-      const response = await API.post("/review", data);
+      const response = await API.post("/github-webhook", data);
 
       setResult(response.data);
     } catch (error) {

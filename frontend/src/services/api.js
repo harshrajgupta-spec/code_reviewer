@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "codereviewer-production-9852.up.railway.app",
 });
 
 export default API;
