@@ -1,31 +1,59 @@
 def policy_engine(state):
 
-    findings = state["ranked_findings"]
+    findings = state.get("ranked_findings", [])
 
-    critical = len([
-        f for f in findings
-        if f.get("severity") == "critical"
-    ])
+    critical = 0
+    high = 0
+    medium = 0
+    low = 0
 
-    high = len([
-        f for f in findings
-        if f.get("severity") == "high"
-    ])
+    for f in findings:
 
-    if critical > 0:
+        severity = str(
+            f.get("severity", "")
+        ).lower()
+
+        if severity == "critical":
+
+            critical += 1
+
+        elif severity == "high":
+
+            high += 1
+
+        elif severity == "medium":
+
+            medium += 1
+
+        elif severity == "low":
+
+            low += 1
+
+    print("Critical:", critical)
+    print("High:", high)
+    print("Medium:", medium)
+    print("Low:", low)
+
+    if critical >= 1:
 
         state["decision"] = "REQUEST_CHANGES"
 
-    elif high > 3:
+    elif high >= 2:
+
+        state["decision"] = "REQUEST_CHANGES"
+
+    elif high >= 1 or medium >= 3:
 
         state["decision"] = "ESCALATE"
 
-    elif len(findings) == 0:
+    elif medium >= 1 or low >= 1:
 
-        state["decision"] = "APPROVE"
+        state["decision"] = "COMMENT_ONLY"
 
     else:
 
-        state["decision"] = "COMMENT_ONLY"
+        state["decision"] = "APPROVE"
+
+    print("FINAL DECISION:", state["decision"])
 
     return state
