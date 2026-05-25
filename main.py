@@ -29,5 +29,5 @@ async def github_webhook(request: Request):
     result = graph.invoke(state)
 
     return {
-        "decision": result["decision"]
+        "comments": result["comments"]
     }
